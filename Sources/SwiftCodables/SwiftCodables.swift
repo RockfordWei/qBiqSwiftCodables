@@ -219,9 +219,8 @@ public struct BiqDeviceAccessPermission: Codable {
 
 /// Available temperature qBiq scales.
 public enum TemperatureScale: Int {
-	case
 	/// C
-		celsius,
+	case celsius,
 	/// F
 		fahrenheit
 }
@@ -533,10 +532,9 @@ public enum DeviceAPI {
 	public struct ObsRequest: Codable {
 		/// The time interval for this observations are sought.
 		public enum Interval: Int, Codable {
-			case
 				/// All observations
 				/// !FIX! for debugging. Remove this.
-				all,
+			case all,
 				/// Return observations for the last 12 hours.
 				/// These observations are not averaged.
 				live,
