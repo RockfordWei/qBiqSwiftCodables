@@ -279,6 +279,32 @@ public struct BiqDeviceLimitType: Codable {
 	}
 }
 
+/// A flag on a limit.
+public struct BiqDeviceLimitFlag: Codable, OptionSet {
+	/// Raw value.
+	public let rawValue: UInt8
+	/// Init a BiqDeviceLimitFlag
+	public init(rawValue: UInt8) {
+		self.rawValue = rawValue
+	}
+	/// Decode from single value.
+	public init(from decoder: Decoder) throws {
+		let d = try decoder.singleValueContainer()
+		self.init(rawValue: try d.decode(UInt8.self))
+	}
+	/// Encode to single value.
+	public func encode(to encoder: Encoder) throws {
+		var c = encoder.singleValueContainer()
+		try c.encode(rawValue)
+	}
+	
+	/// No flag.
+	public static let none = BiqDeviceLimitFlag(rawValue: 0)
+	/// Shared by owner and included in standard limit's fetch.
+	/// Can only be set on owned device.
+	public static let ownerShared = BiqDeviceLimitFlag(rawValue: 1 << 0)
+}
+
 /// A setting or limit on a qBiq.
 public struct BiqDeviceLimit: Codable {
 	/// Id of the user who the limit belongs to.
@@ -293,14 +319,30 @@ public struct BiqDeviceLimit: Codable {
 	/// The optional string value for this limit.
 	public let limitValueString: String?
 	/// The limit type.
-	public var type: BiqDeviceLimitType? { return BiqDeviceLimitType(rawValue: limitType) }
+	public var type: BiqDeviceLimitType { return BiqDeviceLimitType(rawValue: limitType) }
+	/// Flag modifier for limit.
+	public let limitFlag: UInt8?
+	/// The limit flag.
+	public var flag: BiqDeviceLimitFlag {
+		guard let lf = limitFlag else {
+			return .none
+		}
+		return BiqDeviceLimitFlag(rawValue: lf)
+	}
+	
 	/// Init a BiqDeviceLimit.
-	public init(userId u: UserId, deviceId d: DeviceURN, limitType t: BiqDeviceLimitType, limitValue v: Float = 0.0, limitValueString vs: String? = nil) {
+	public init(userId u: UserId,
+				deviceId d: DeviceURN,
+				limitType t: BiqDeviceLimitType,
+				limitValue v: Float = 0.0,
+				limitValueString vs: String? = nil,
+				limitFlag lf: BiqDeviceLimitFlag) {
 		userId = u
 		deviceId = d
 		limitType = t.rawValue
 		limitValue = v
 		limitValueString = vs
+		limitFlag = lf.rawValue
 	}
 }
 
@@ -487,11 +529,17 @@ public enum DeviceAPI {
 		public let limitValue: Float?
 		/// The optional string value for the limit.
 		public let limitValueString: String?
+		/// Flag for the limit
+		public let limitFlag: BiqDeviceLimitFlag
 		/// Init a DeviceLimit.
-		public init(limitType t: BiqDeviceLimitType, limitValue v: Float?, limitValueString vs: String? = nil) {
+		public init(limitType t: BiqDeviceLimitType,
+					limitValue v: Float?,
+					limitValueString vs: String? = nil,
+					limitFlag lf: BiqDeviceLimitFlag) {
 			limitType = t
 			limitValue = v
 			limitValueString = vs
+			limitFlag = lf
 		}
 	}
 	/// Request to update indicated device limits.
