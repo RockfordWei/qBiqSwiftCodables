@@ -530,12 +530,12 @@ public enum DeviceAPI {
 		/// The optional string value for the limit.
 		public let limitValueString: String?
 		/// Flag for the limit
-		public let limitFlag: BiqDeviceLimitFlag
+		public let limitFlag: BiqDeviceLimitFlag?
 		/// Init a DeviceLimit.
 		public init(limitType t: BiqDeviceLimitType,
 					limitValue v: Float?,
 					limitValueString vs: String? = nil,
-					limitFlag lf: BiqDeviceLimitFlag) {
+					limitFlag lf: BiqDeviceLimitFlag?) {
 			limitType = t
 			limitValue = v
 			limitValueString = vs
