@@ -695,3 +695,48 @@ public extension TemperatureScale {
 		}
 	}
 }
+
+
+public struct QBiqStat: Codable {
+  public let owned: Int
+  public let followed: Int
+  public let following: Int
+}
+
+public struct QBiqSearchResult: Codable {
+  public let id: String
+  public let name: String
+}
+
+public struct QBiqTagSearchResult: Codable {
+  public let id: String
+  public let name: String
+  public let description: String
+  public let tags: [String]
+}
+
+public struct QBiqProfileRecord: Codable {
+  public let id: DeviceURN
+  public let description: String
+}
+
+public struct QBiqProfileTag: Codable {
+  public let id: DeviceURN
+  public let tag: String
+}
+
+public struct QBiqProfile: Codable {
+  public let id: DeviceURN
+  public let description: String
+  public let tags: [String]
+}
+
+public struct QBiqLocationUpdate: Codable {
+  public let id: DeviceURN
+  public let x: Double
+  public let y: Double
+}
+
+public enum QBiqError: Error {
+  case reason(String)
+}
