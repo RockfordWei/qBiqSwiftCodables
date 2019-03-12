@@ -388,6 +388,57 @@ public struct BiqDeviceFirmware: Codable {
 	}
 }
 
+
+/// A query result of qbiq sharing statistics
+public struct BiqStat: Codable {
+	/// The total amount of qbiqs that a user owns
+	public let owned: Int
+	/// The total amount of qbiqs that a user is sharing
+	public let followed: Int
+	/// The total amount of qbiqs that a user is following
+	public let following: Int
+	/// Init a BiqStat
+	public init(owned: Int = 0, followed: Int = 0, following: Int = 0) {
+		self.owned = owned
+        self.followed = followed
+        self.following = following
+	}
+}
+
+/// A query result of qbiq search by name, tag or description
+public struct BiqTagSearchResult: Codable {
+	/// The biq id
+    public let id: String
+	/// The biq name
+    public let name: String
+	/// The biq description
+    public let description: String
+	/// The biq tags
+    public let tags: [String]
+	/// Init a BiqTagSearchResult
+    public init(id: String = "", name: String = "", description: String = "", tags: [String] = []) {
+        self.id = id
+        self.name = name
+        self.description = description
+        self.tags = tags
+    }
+}
+
+/// A location structure
+public struct BiqLocationUpdate: Codable {
+	/// The qbiq Id
+    public let id: DeviceURN
+	/// The longitude
+    public let x: Double
+	/// The latitude
+    public let y: Double
+    public init(id: DeviceURN = "", x: Double = 0, y: Double = 0) {
+        self.id = id
+        self.x = x
+        self.y = y
+    }
+}
+
 /// Request and response objects for the groups API.
 public enum GroupAPI {
 	/// Request to create a group of qBiqs.
